@@ -1,0 +1,23 @@
+name: Signaler un bug
+description: Décrire un comportement incorrect reproductible
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Comportement observé
+      description: Décrivez précisément le problème.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Étapes de reproduction
+      description: Indiquez les actions, le profil et la période concernés.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Navigateur et appareil
+  - type: textarea
+    attributes:
+      label: Capture ou contexte complémentaire

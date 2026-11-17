@@ -1,0 +1,14 @@
+/* L'accueil conserve le billetage principal en paysage; les autres vues restent en portrait. */
+.cash-layout-horizontal .real-cash-content{align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.cash-layout-horizontal .bundle-zone,.cash-layout-horizontal .loose-zone{align-items:center;justify-content:center;gap:15px;flex-wrap:wrap}
+.cash-layout-horizontal .note-pile-wrap{display:flex;flex-direction:column;align-items:center;width:auto;min-height:0;flex:0 0 auto}
+.cash-layout-horizontal .note-pile{position:relative;left:auto;top:auto;transform:none;margin:0}
+.cash-layout-horizontal .banknote-bundle{width:200px;height:125px;transform:none;margin:0}
+.cash-layout-horizontal .bundle-notes{position:relative;top:auto;left:auto;width:200px;height:125px;transform:none}
+.cash-layout-horizontal .note-count-bubble{right:-9px;left:auto;top:-12px;transform:none}
+@media(max-width:620px){
+ .cash-layout-horizontal .note-pile-wrap{width:auto;min-height:0;flex-basis:auto}
+ .cash-layout-horizontal .note-pile{transform:scale(.84);transform-origin:left top;margin-right:-30px;margin-bottom:-14px}
+ .cash-layout-horizontal .banknote-bundle{width:200px;height:125px;transform:scale(.82);transform-origin:left center;margin-right:-32px}
+ .cash-layout-horizontal .bundle-notes{transform:none}
+}

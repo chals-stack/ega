@@ -1,0 +1,46 @@
+.amount-with-notes{display:flex;align-items:center;flex-wrap:wrap;gap:12px;min-width:0}
+.money-miniature{display:inline-flex;align-items:flex-start;flex-wrap:wrap;gap:8px;max-width:100%;padding:6px 0;vertical-align:middle;text-align:center;line-height:1.3}
+.mini-denomination{display:inline-flex;flex-direction:column;align-items:center;width:56px;flex:0 0 56px;gap:3px}
+.mini-note-frame{display:block;position:relative;width:56px;height:91px}
+.mini-banknote{display:block;position:absolute;width:78px;height:42px;background-image:url('/images/bceao-banknotes-real.jfif');background-size:200% 500%;background-repeat:no-repeat;transform-origin:0 0;transform:translateX(42px) rotate(90deg);border-radius:2px;box-shadow:2px 2px 4px #0003;border:1px solid #ffffff70}
+.mini-note-count{position:absolute;left:0;top:0;z-index:5;min-width:28px;min-height:23px;display:flex;align-items:center;justify-content:center;padding:3px 5px;border-radius:7px;background:#111710;color:#fff;font:900 12px/1.2 var(--font-inter),Arial,sans-serif;border:2px solid #fff;box-shadow:0 2px 5px #0002;white-space:nowrap}
+.mini-note-value{font:850 11px/1.3 var(--font-inter),Arial,sans-serif;color:#10160d;white-space:nowrap}
+.mini-remainder{align-self:center;display:inline-flex;flex-direction:column;gap:3px;max-width:110px;font-size:12px;font-weight:850;color:#20271b;line-height:1.5;padding:8px;border:1px solid #d6dbc9;border-radius:8px;background:#fffdf3}
+.mini-remainder small{font-size:10px!important;color:#343a30!important;font-weight:750}
+.money-mini-zero{display:inline-block;font-size:12px;font-weight:750;color:#343a30;padding:8px 0}
+.metric>div>.money-miniature,.calendar-summary article>.money-miniature{display:inline-flex;font-size:inherit;margin-top:8px}
+.metric>div>.money-miniature>span{margin:0}
+.metric>div{display:block}
+.calendar-summary article>.money-miniature{grid-column:2}
+.calendar-entry-money>strong{font-size:19px;color:#111;font-weight:900}
+.calendar-entry-money>strong small{font-size:12px}
+.payment-note-preview{margin:14px 0 22px;padding:14px;background:#f5f7ee;border:1px solid #dce0d6;border-radius:12px}
+.payment-note-preview>.eyebrow{display:block;margin-bottom:4px}
+.payment-breakdown>span{flex-wrap:wrap;gap:12px}
+.payment-breakdown strong>.money-miniature,.settings-card dd>.money-miniature{display:flex;justify-content:flex-end;margin-top:6px}
+.personal-card>.money-miniature{margin-top:12px}
+.beneficiary-bottom{align-items:flex-start}
+.members-section td{vertical-align:middle}
+.mini-denomination .mini-note-value{background:transparent;border:0;padding:0;box-shadow:none}
+/* Portrait stacks in the large pot reuse the original photographs and attached bands. */
+.real-cash-content .note-pile-wrap{width:132px;min-height:222px;display:block;position:relative;flex:0 0 132px}
+.real-cash-content .note-pile{position:absolute;left:0;top:0;transform-origin:0 0;transform:translateX(125px) rotate(90deg);margin:0}
+.real-cash-content .banknote-bundle{width:132px;height:212px;transform:none;margin:0}
+.real-cash-content .bundle-notes{position:absolute;top:0;left:0;transform-origin:0 0;transform:translateX(125px) rotate(90deg)}
+.real-cash-content .note-count-bubble{right:auto;left:0;top:0;transform-origin:0 0;transform:rotate(-90deg) translateX(-100%);font-size:16px}
+@media(max-width:1250px){.amount-with-notes{flex-direction:column;align-items:flex-start;gap:6px}}
+@media(max-width:620px){
+ .money-miniature{gap:5px}
+ .mini-denomination{width:48px;flex-basis:48px}
+ .mini-note-frame{width:48px;height:78px}
+ .mini-banknote{width:64px;height:34px;transform:translateX(34px) rotate(90deg)}
+ .mini-note-count{font-size:11px;min-width:25px;min-height:22px}
+ .mini-note-value{font-size:10px}
+ .payment-money,.calendar-entry-money{grid-column:2}
+ .amount-with-notes{gap:8px}
+ .payment-breakdown strong>.money-miniature{justify-content:flex-start}
+ .real-cash-content .note-pile-wrap{width:120px;flex-basis:120px}
+ .real-cash-content .note-pile{transform:translateX(116px) rotate(90deg)}
+ .real-cash-content .banknote-bundle{width:120px;height:212px}
+ .real-cash-content .bundle-notes{transform:translateX(116px) rotate(90deg)}
+}

@@ -1,0 +1,8 @@
+node_modules
+node_modules.staging
+.next
+.git
+ega-v1
+*.tsbuildinfo
+design-qa.md
+asset-notes.md
