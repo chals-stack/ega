@@ -5,6 +5,7 @@ import "./globals.css";
 import "./responsive.css";
 import "./money-miniatures.css";
 import "./cash-horizontal.css";
+import "./tracking.css";
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 

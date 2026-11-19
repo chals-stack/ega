@@ -2,6 +2,13 @@
 
 Toutes les évolutions importantes d’EGA sont documentées ici.
 
+## 1.1.0 — 2026-11-19
+
+- Nouvelle section de suivi visuel sans courbes classiques.
+- Billets BCEAO verticaux et miniatures positionnés selon les montants validés.
+- Vues cumulée, quotidienne et individuelle, mises à jour avec le registre.
+- Filtre entre le cycle actuel et les sept derniers jours.
+
 ## 1.0.0 — 2026-11-17
 
 - Interface responsive et navigation complète.

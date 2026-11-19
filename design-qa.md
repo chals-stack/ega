@@ -2,6 +2,19 @@
 
 final result: blocked
 
+## Mise à jour du 19 novembre 2026 — suivi visuel par billets
+
+- Source : `C:/Users/Samuel/AppData/Local/Temp/codex-clipboard-9bb7bff3-c535-4a02-bad7-1032b9eee14b.png`.
+- Nouvelle rubrique « Suivi visuel » inspirée du mouvement vertical du croquis, sans tracer de courbe classique.
+- Trois graphes fonctionnels : cagnotte cumulée, entrées quotidiennes et progression individuelle.
+- Chaque point utilise des billets BCEAO miniatures en orientation verticale, un compteur exact par coupure, un montant FCFA et une position proportionnelle à la valeur.
+- Les données proviennent uniquement du principal validé ; pénalités, arriérés et déclarations en attente restent séparés.
+- Filtres fonctionnels : cycle actuel et sept derniers jours.
+- Responsive prévu avec défilement horizontal interne sur petits écrans, sans débordement global.
+- Vérification technique : 15 tests métier réussis et build Next.js terminé avec succès. Avertissements environnementaux uniquement sur ESLint absent et les liens symboliques du dossier standalone Windows.
+- Vérification visuelle bloquée : le service du navigateur contrôlable a expiré deux fois avant l’ouverture de l’application. Aucune capture d’implémentation ni comparaison au même viewport n’a pu être produite.
+- Résultat visuel : bloqué.
+
 ## Mise à jour — billetage d'accueil et pénalité fixe
 
 - Source : `C:/Users/Samuel/AppData/Local/Temp/codex-clipboard-1b3a8b7d-3a6f-49a1-9423-4deecba84daa.png`.
