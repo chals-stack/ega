@@ -1,4 +1,3 @@
-/* L'accueil conserve le billetage principal en paysage; les autres vues restent en portrait. */
 .cash-layout-horizontal .real-cash-content{align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
 .cash-layout-horizontal .bundle-zone,.cash-layout-horizontal .loose-zone{align-items:center;justify-content:center;gap:15px;flex-wrap:wrap}
 .cash-layout-horizontal .note-pile-wrap{display:flex;flex-direction:column;align-items:center;width:auto;min-height:0;flex:0 0 auto}

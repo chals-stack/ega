@@ -1,4 +1,3 @@
-/** Pure, dependency-free demo ledger. Amounts are integer XOF. All mutations return a new State. */
 export type Role = "admin" | "treasurer" | "member";
 export type Member = { id: string; name: string; initials: string; role: Role; color: string };
 export type Period = { id: string; label: string; opensAt: string; closesAt: string; baseAmount: number; target: number };
@@ -38,7 +37,6 @@ function log(state: State, actorId: string, action: string, detail: string) {
   state.audit.unshift({ id: nextId(state, "audit"), at: state.now, actorId, action, detail });
 }
 
-/** Lomé uses UTC: open on day 30 (February's final day), close on next month's 8th, exclusive. month is 1-based. */
 export function makePeriod(year: number, month: number, memberCount = 10, baseAmount = 25_000): Period {
   if (!Number.isInteger(month) || month < 1 || month > 12 || !Number.isInteger(year)) throw new Error("Période invalide.");
   const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
@@ -80,7 +78,6 @@ export function createDemoState(): State {
   };
 }
 
-/** Current principal and penalties stay separate. arrearsDue excludes the displayed current period to avoid double counting. */
 export function memberSummary(state: State, memberId: string) {
   assertMember(state, memberId);
   const current = state.payments.filter((p) => p.memberId === memberId && p.target === "current");
@@ -120,7 +117,6 @@ function timelyPending(state: State, memberId: string) {
   return state.payments.filter((p) => p.memberId === memberId && p.target === "current" && p.status === "pending" && p.declaredAt < state.period.closesAt).reduce((sum, p) => sum + p.amount, 0);
 }
 
-/** Reconciles confirmed default once per member/period; pending sufficient principal defers the decision. */
 function assessDefault(state: State, memberId: string) {
   if (!state.closed) return;
   const summary = memberSummary(state, memberId);
@@ -138,7 +134,6 @@ function assessDefault(state: State, memberId: string) {
 }
 
 export type DeclareInput = { memberId: string; amount: number; method: string; reference: string; proofName?: string; target?: "current" | "arrears" };
-/** Caller identifies the member; UI binds memberId to the selected demo identity. Declarations never increase confirmed totals. */
 export function declarePayment(state: State, input: DeclareInput): State {
   const member = assertMember(state, input.memberId);
   if (!Number.isSafeInteger(input.amount) || input.amount <= 0) throw new Error("Saisissez un montant entier positif en FCFA.");
@@ -179,7 +174,6 @@ export function reviewPayment(state: State, id: string, approve: boolean, actorI
   return next;
 }
 
-/** Explicit demo clock jump to December 8; idempotent, with one assessment per obligation. */
 export function closePeriod(state: State, actorId: string): State {
   financeActor(state, actorId);
   if (state.closed) return state;
@@ -192,10 +186,8 @@ export function closePeriod(state: State, actorId: string): State {
   return next;
 }
 
-/** Reset is intentionally a fresh seed, without mutating the previous state. */
 export const resetDemo = createDemoState;
 
-/** Updates locally persisted records created before the 1,500 FCFA flat late-fee policy. */
 export function migratePenaltyPolicy(state: State): State {
   const next = clone(state);
   next.penalties = next.penalties.map((penalty) => ({ ...penalty, amount: LATE_FEE }));

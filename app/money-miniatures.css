@@ -22,7 +22,6 @@
 .beneficiary-bottom{align-items:flex-start}
 .members-section td{vertical-align:middle}
 .mini-denomination .mini-note-value{background:transparent;border:0;padding:0;box-shadow:none}
-/* Portrait stacks in the large pot reuse the original photographs and attached bands. */
 .real-cash-content .note-pile-wrap{width:132px;min-height:222px;display:block;position:relative;flex:0 0 132px}
 .real-cash-content .note-pile{position:absolute;left:0;top:0;transform-origin:0 0;transform:translateX(125px) rotate(90deg);margin:0}
 .real-cash-content .banknote-bundle{width:132px;height:212px;transform:none;margin:0}

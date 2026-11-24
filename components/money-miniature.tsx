@@ -4,7 +4,6 @@ import { cashBreakdown } from "./cash-visual";
 
 const money = (n: number) => new Intl.NumberFormat("fr-TG").format(n);
 
-/** One portrait stack per denomination. The counter is the exact number of notes. */
 export default function MoneyMiniature({ amount }: { amount: number }) {
   const value = Number.isSafeInteger(amount) && amount > 0 ? amount : 0;
   const notes = cashBreakdown(value);

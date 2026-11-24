@@ -87,7 +87,7 @@ export default function Dashboard() {
   useEffect(() => {
     try { const saved = localStorage.getItem(KEY); if (saved) { const parsed = JSON.parse(saved); if ((parsed.version === 2 || parsed.version === 3) && Array.isArray(parsed.data?.members) && Array.isArray(parsed.data?.payments)) setState(migratePenaltyPolicy(parsed.data)); } } catch { setToast("Votre navigateur n’a pas pu restaurer le registre."); }
     setLoaded(true);
-    const sync = (e: StorageEvent) => { if (e.key === KEY && e.newValue) { try { const value = JSON.parse(e.newValue); if ((value.version === 2 || value.version === 3) && Array.isArray(value.data?.members)) setState(migratePenaltyPolicy(value.data)); } catch { /* ignore invalid external state */ } } };
+    const sync = (e: StorageEvent) => { if (e.key === KEY && e.newValue) { try { const value = JSON.parse(e.newValue); if ((value.version === 2 || value.version === 3) && Array.isArray(value.data?.members)) setState(migratePenaltyPolicy(value.data)); } catch {} } };
     window.addEventListener("storage", sync); return () => window.removeEventListener("storage", sync);
   }, []);
   useEffect(() => { if (loaded) { try { localStorage.setItem(KEY, JSON.stringify({version:3,data:state})); } catch { setToast("Stockage indisponible : les changements restent dans cet onglet."); } } }, [state, loaded]);
@@ -113,13 +113,12 @@ export default function Dashboard() {
       if (saved) {
         const tracker = JSON.parse(saved);
         setTrackerEnabled(Boolean(tracker.enabled));
-        // GPS consent must be renewed in the current session.
       }
-    } catch { /* local tracker state is optional */ }
+    } catch {}
     return () => { if (watchId.current !== null) navigator.geolocation?.clearWatch(watchId.current); };
   }, []);
   useEffect(() => {
-    try { localStorage.setItem("ega-tracker-mvp-2", JSON.stringify({ enabled: trackerEnabled })); } catch { /* optional persistence */ }
+    try { localStorage.setItem("ega-tracker-mvp-2", JSON.stringify({ enabled: trackerEnabled })); } catch {}
   }, [trackerEnabled, liveLocations]);
   useEffect(() => { if (!toast) return; const timeout = setTimeout(() => setToast(""), 4500); return () => clearTimeout(timeout); }, [toast]);
   const user = state.members.find(m => m.id === profileId) ?? state.members[0];

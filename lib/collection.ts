@@ -13,7 +13,6 @@ export function selectionRange(selected: string, mode: CalendarMode) {
   return { start: selected.slice(0, 7) + "-01", end: dayKey(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) };
 }
 
-/** Credit only approved principal, capped per member; fees and past arrears never inflate the pot. */
 export function collectionEntries(state: State): CollectionEntry[] {
   const paid = new Map<string, number>();
   return state.payments.map(p => ({ ...p, at: p.status === "approved" ? p.reviewedAt ?? p.declaredAt : p.declaredAt, principal: 0 }))
