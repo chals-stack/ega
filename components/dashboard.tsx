@@ -1,20 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { SquaresFour, UsersThree, Wallet, ClockCounterClockwise, GearSix, ArrowUpRight, ArrowRight, Plus, CaretDown, CaretRight, Check, X, Bell, MagnifyingGlass, ShieldCheck, CalendarBlank, DownloadSimple, Receipt, ArrowDownLeft, Info, SignOut, Question, List, Copy, CheckCircle, WarningCircle, UploadSimple, HourglassMedium, ArrowsClockwise, PaperPlaneTilt, Crown, LockKey, SlidersHorizontal, MapTrifold, MapPin, NavigationArrow, Timer, Eye, EyeSlash, ChartBar } from "@phosphor-icons/react";
+import { SquaresFour, UsersThree, Wallet, ClockCounterClockwise, GearSix, ArrowUpRight, ArrowRight, Plus, CaretDown, CaretRight, Check, X, Bell, MagnifyingGlass, ShieldCheck, CalendarBlank, DownloadSimple, Receipt, ArrowDownLeft, Info, SignOut, Question, List, Copy, CheckCircle, WarningCircle, UploadSimple, HourglassMedium, ArrowsClockwise, PaperPlaneTilt, Crown, LockKey, SlidersHorizontal, MapTrifold, MapPin, NavigationArrow, Timer, Eye, EyeSlash, ChartBar, Storefront } from "@phosphor-icons/react";
 import { createDemoState, totals, memberSummary, declarePayment, reviewPayment, migratePenaltyPolicy, type State, type Member } from "@/lib/engine";
 import TrackerMap from "@/components/tracker-map";
 import CashVisual, { cashBreakdown } from "@/components/cash-visual";
 import CollectionCalendar from "@/components/collection-calendar";
 import MoneyMiniature from "@/components/money-miniature";
 import ContributionTracking from "@/components/contribution-tracking";
+import Marketplace from "@/components/marketplace";
+import { createMarketState, type MarketState } from "@/lib/market";
 
 const KEY = "ega-v1-state-2";
+const MARKET_KEY = "ega-market-v1";
 const money = (n: number) => new Intl.NumberFormat("fr-FR").format(n);
 const date = (s: string) => new Intl.DateTimeFormat("fr-TG", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Lome" }).format(new Date(s));
-type View = "overview" | "tracking" | "members" | "payments" | "history" | "calendar" | "tracker" | "settings";
+type View = "overview" | "tracking" | "members" | "payments" | "history" | "calendar" | "market" | "tracker" | "settings";
 type Modal = "pay" | "invite" | "rules" | "beneficiary" | "notifications" | "help" | "profile" | null;
-const nav = [{ id: "overview", label: "Vue d’ensemble", icon: SquaresFour }, { id: "tracking", label: "Suivi visuel", icon: ChartBar }, { id: "calendar", label: "Calendrier", icon: CalendarBlank }, { id: "members", label: "Les membres", icon: UsersThree }, { id: "payments", label: "Les cotisations", icon: Wallet }, { id: "history", label: "L’historique", icon: ClockCounterClockwise }] as const;
+const nav = [{ id: "overview", label: "Vue d’ensemble", icon: SquaresFour }, { id: "tracking", label: "Suivi visuel", icon: ChartBar }, { id: "calendar", label: "Calendrier", icon: CalendarBlank }, { id: "members", label: "Les membres", icon: UsersThree }, { id: "payments", label: "Les cotisations", icon: Wallet }, { id: "market", label: "Boutique solidaire", icon: Storefront }, { id: "history", label: "L’historique", icon: ClockCounterClockwise }] as const;
 
 function Avatar({ member, size = "normal" }: { member: Member; size?: string }) {
   return <span className={`avatar ${size}`} style={{ background: member.color }}><img src={`/images/members/${member.id}.png`} alt={`Portrait de ${member.name}`} /></span>;
@@ -44,7 +47,9 @@ function ModalShell({ title, eyebrow, children, onClose }: { title: string; eyeb
 
 export default function Dashboard() {
   const [state, setState] = useState<State>(() => createDemoState());
+  const [market, setMarket] = useState<MarketState>(() => createMarketState());
   const [loaded, setLoaded] = useState(false);
+  const [marketLoaded, setMarketLoaded] = useState(false);
   const [profileId, setProfileId] = useState("a1");
   const [view, setView] = useState<View>("overview");
   const [modal, setModal] = useState<Modal>(null);
@@ -86,6 +91,22 @@ export default function Dashboard() {
     window.addEventListener("storage", sync); return () => window.removeEventListener("storage", sync);
   }, []);
   useEffect(() => { if (loaded) { try { localStorage.setItem(KEY, JSON.stringify({version:3,data:state})); } catch { setToast("Stockage indisponible : les changements restent dans cet onglet."); } } }, [state, loaded]);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(MARKET_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const data = parsed.data;
+        if (parsed.version === 1 && Array.isArray(data?.products) && Array.isArray(data?.transactions) && Array.isArray(data?.orders) && data?.balances && typeof data.balances === "object") setMarket(data);
+      }
+    } catch { setToast("Le portefeuille local n’a pas pu être restauré."); }
+    setMarketLoaded(true);
+  }, []);
+  useEffect(() => {
+    if (!marketLoaded) return;
+    try { localStorage.setItem(MARKET_KEY, JSON.stringify({ version: 1, data: market })); }
+    catch { setToast("Stockage indisponible : la boutique reste active dans cet onglet."); }
+  }, [market, marketLoaded]);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ega-tracker-mvp-2");
@@ -190,12 +211,13 @@ export default function Dashboard() {
       <header className="topbar"><div className="breadcrumb"><button className="icon-button mobile-menu" onClick={() => setMobileNav(!mobileNav)} aria-label="Ouvrir le menu"><List size={24} /></button><span>Mon espace</span><CaretRight size={13} /><strong>{view === "settings" ? "Paramètres" : view === "tracker" ? "Tracker sécurité" : nav.find(n => n.id === view)?.label}</strong></div><div className="header-actions"><button className="icon-button notification-button" aria-label="Voir les notifications" onClick={() => { setModal("notifications"); setNotifsRead(true); }}><Bell size={22} />{!notifsRead && <i />}</button><span className="header-divider" /><div className="profile-wrap"><button className="profile-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen}><Avatar member={user} size="small" /><span>{user.name.split(" ")[0]}<small>{user.role === "member" ? "Membre" : user.role === "treasurer" ? "Trésorier" : "Administratrice"}</small></span><CaretDown size={14} /></button>{menuOpen && <div className="profile-menu"><div className="eyebrow">PROFILS DU COLLECTIF</div>{["f7","m2","a1","y10"].map(id => { const m = state.members.find(x => x.id === id)!; return <button key={id} onClick={() => { setProfileId(id); if (m.role !== "admin" && view === "tracker") setView("overview"); setMenuOpen(false); setError(""); }}><Avatar member={m} size="small" /><span>{m.name}<small>{m.role === "member" ? "Membre" : m.role === "treasurer" ? "Trésorier" : "Administratrice"}</small></span>{user.id === id && <Check size={17} />}</button>; })}</div>}</div></div></header>
 
       <main>
-        <section className="page-intro"><div><div className="eyebrow intro-eyebrow">UN PETIT GESTE. UN GRAND COLLECTIF.</div><h1>{view === "overview" ? `On avance ensemble, ${user.name.split(" ")[0]}.` : view === "tracking" ? "Voir l’argent avancer, vraiment." : view === "members" ? "Les visages de votre tontine." : view === "payments" ? "Chaque cotisation compte." : view === "calendar" ? "Le collectif, jour après jour." : view === "history" ? "Une histoire en toute transparence." : view === "tracker" ? "La sécurité, sans sacrifier la confiance." : "Des règles claires, pour tous."}</h1><p>{view === "overview" ? "Votre épargne grandit. Votre confiance aussi." : view === "tracking" ? "Des billets réels remplacent les courbes pour suivre chaque progression en un regard." : view === "members" ? "Chacun contribue. Tout le monde voit où l’on en est." : view === "payments" ? "Déclarez, vérifiez et retrouvez chaque contribution." : view === "calendar" ? "Retrouvez qui a cotisé, quand, et comment la cagnotte a grandi." : view === "history" ? "Chaque mouvement a sa place dans le registre du groupe." : view === "tracker" ? "Une localisation temporaire, consentie et visible par l’administratrice uniquement." : "Les engagements qui font avancer votre collectif."}</p></div><button className="button button-white intro-action" onClick={() => setModal("invite")}><Plus size={18} />Inviter un membre</button></section>
+        <section className="page-intro"><div><div className="eyebrow intro-eyebrow">UN PETIT GESTE. UN GRAND COLLECTIF.</div><h1>{view === "overview" ? `On avance ensemble, ${user.name.split(" ")[0]}.` : view === "tracking" ? "Voir l’argent avancer, vraiment." : view === "members" ? "Les visages de votre tontine." : view === "payments" ? "Chaque cotisation compte." : view === "calendar" ? "Le collectif, jour après jour." : view === "market" ? "Faire durer les bénéfices de sa tontine." : view === "history" ? "Une histoire en toute transparence." : view === "tracker" ? "La sécurité, sans sacrifier la confiance." : "Des règles claires, pour tous."}</h1><p>{view === "overview" ? "Votre épargne grandit. Votre confiance aussi." : view === "tracking" ? "Des billets réels remplacent les courbes pour suivre chaque progression en un regard." : view === "members" ? "Chacun contribue. Tout le monde voit où l’on en est." : view === "payments" ? "Déclarez, vérifiez et retrouvez chaque contribution." : view === "calendar" ? "Retrouvez qui a cotisé, quand, et comment la cagnotte a grandi." : view === "market" ? "Un portefeuille personnel et des offres utiles, sans toucher à la cagnotte collective." : view === "history" ? "Chaque mouvement a sa place dans le registre du groupe." : view === "tracker" ? "Une localisation temporaire, consentie et visible par l’administratrice uniquement." : "Les engagements qui font avancer votre collectif."}</p></div><button className="button button-white intro-action" onClick={() => setModal("invite")}><Plus size={18} />Inviter un membre</button></section>
 
         <div className="group-bar"><div className="group-identity"><span className="group-icon"><UsersThree size={22} weight="fill" /></span><div><h2>Tontine Lomé Solidarité</h2><span>{state.members.length} membres au Togo <span className="middle-dot">·</span> 25 000 FCFA / mois</span></div><button className="icon-button" aria-label="Voir les règles de la tontine" onClick={() => setModal("rules")}><CaretDown size={17} /></button></div><div className="group-meta"><div className={`collection-state-card ${state.closed ? "closed" : ""}`}><ClockCounterClockwise size={22} /><span><small>Cycle de {state.period.label}</small><strong>{state.closed ? "Période clôturée" : "Collecte en cours"}</strong></span></div><button className="button button-yellow calendar-launch" onClick={() => navigate("calendar")}><CalendarBlank size={22} /><span>Ouvrir le calendrier<small>Suivi mensuel, hebdomadaire et journalier</small></span><ArrowUpRight size={19} /></button></div></div>
 
         {view === "calendar" && <CollectionCalendar state={state} />}
         {view === "tracking" && <ContributionTracking state={state} />}
+        {view === "market" && <Marketplace market={market} members={state.members} member={user} onChange={setMarket} notify={notify} />}
 
         {view === "overview" && <>
           {trackerEnabled && user.role === "member" && <section className={`location-consent ${sharingId === user.id ? "is-sharing" : ""}`}><span className="location-consent-icon"><NavigationArrow size={23} weight="fill" /></span><div><span className="eyebrow">SESSION TRACKER ACTIVE</span><h3>{sharingId === user.id ? "Votre position est partagée." : "Aidez le groupe à sécuriser la collecte."}</h3><p>{sharingId === user.id ? "Le GPS est actualisé tant que cet onglet reste ouvert. Vous pouvez arrêter immédiatement." : "EGA demandera votre autorisation au navigateur. Aucun historique de déplacement n’est conservé."}</p></div>{sharingId === user.id ? <button className="button button-light" onClick={stopLocationShare}><EyeSlash size={18} />Arrêter le partage</button> : <button className="button button-dark" onClick={startLocationShare}><MapPin size={18} />Partager ma position</button>}</section>}

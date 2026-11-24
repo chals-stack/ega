@@ -1,12 +1,12 @@
 {
   "name": "ega",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "test": "node --experimental-strip-types --test --test-isolation=none lib/engine.test.ts lib/collection.test.ts"
+    "test": "node --experimental-strip-types --test --test-isolation=none lib/engine.test.ts lib/collection.test.ts lib/market.test.ts"
   },
   "dependencies": {
     "@phosphor-icons/react": "2.1.1",

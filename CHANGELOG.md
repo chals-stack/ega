@@ -2,6 +2,15 @@
 
 Toutes les évolutions importantes d’EGA sont documentées ici.
 
+## 1.2.0 — 2026-11-24
+
+- Portefeuille personnel séparé de la cagnotte collective.
+- Réinjection administrée des versements de tontine dans le solde d’un bénéficiaire.
+- Boutique solidaire et offres Black Friday avec recherche, catégories, stock et billetage visuel.
+- Achat avec le portefeuille, décrément de stock, commande et historique de transactions atomiques.
+- CRUD complet du catalogue réservé à l’administratrice.
+- Données de démonstration persistées localement, sans transfert financier réel.
+
 ## 1.1.0 — 2026-11-19
 
 - Nouvelle section de suivi visuel sans courbes classiques.

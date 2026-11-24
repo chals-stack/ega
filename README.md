@@ -33,6 +33,8 @@ Application Next.js, React et TypeScript de suivi de tontine au Togo. Design jau
 - Paiements déclaratifs Mixx by Yas et Moov Money Flooz.
 - Calendrier journalier, hebdomadaire et mensuel avec billetage cumulé.
 - Tracker cartographique activable par l’administrateur avec consentement de géolocalisation.
+- Portefeuille personnel, boutique solidaire et offres Black Friday avec gestion CRUD du catalogue.
+- Réinjection des versements de tontine, achats, stocks et historique de transactions en mode démonstration.
 - Interface responsive, documents juridiques, partage social et export CSV.
 
 > Cette version est un MVP de démonstration. Elle n’encaisse pas réellement d’argent et son registre est stocké dans le navigateur.
